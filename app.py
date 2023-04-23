@@ -1,3 +1,15 @@
+import subprocess
+from flag import *
+# Read the requirements.txt file
+if (get() == 0):
+    with open('requirements.txt') as f:
+        requirements = f.read().splitlines()
+
+    # Install the required packages using pip
+    for package in requirements:
+        subprocess.check_call(['pip', 'install', package])
+    set(1)
+
 import pandas as pd
 from PIL import Image
 import streamlit as st
@@ -5,6 +17,8 @@ from streamlit_drawable_canvas import st_canvas
 import matplotlib.pyplot as plt
 import os
 import numpy as np
+
+cur = os.getcwd()
 
 # Define a function to validate the input value
 def validate_input(value):
