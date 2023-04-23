@@ -14,7 +14,7 @@ import pandas as pd
 from PIL import Image
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 import os
 import numpy as np
 
