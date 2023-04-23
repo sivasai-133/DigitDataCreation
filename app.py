@@ -6,8 +6,6 @@ import matplotlib.pyplot as plt
 import os
 import numpy as np
 
-cur = os.getcwd()
-
 # Define a function to validate the input value
 def validate_input(value):
     if value is not None:
@@ -41,8 +39,8 @@ def draw_images():
         key="canvas",
     )
 
-    if not os.path.exists('cur/dataset/'):
-        os.makedirs('cur/dataset/')
+    if not os.path.exists(cur+'/dataset/'):
+        os.makedirs( cur+ '/dataset/')
 
 
     # Add an input field to the Streamlit app
@@ -61,7 +59,7 @@ def draw_images():
         st.image(canvas_result.image_data)
         image = Image.fromarray(canvas_result.image_data.astype('uint8'), 'RGBA')
         grayscale_image = image.convert('L')
-        path = 'cur/dataset/' + str(validated_value) + '/'
+        path = cur+ '/dataset/' + str(validated_value) + '/'
         if not os.path.exists(path) and validated_value is not None:
             os.makedirs(path)
 
@@ -85,7 +83,7 @@ def display_images():
     validated_value = validate_input(value)
 
     if validated_value is not None:
-        path = 'cur/dataset/' + str(validated_value) + '/'
+        path = cur+'/dataset/' + str(validated_value) + '/'
         if os.path.exists(path) and len(os.listdir(path)) > 0:
             image_filenames = os.listdir(path)
             random_image_filename = np.random.choice(image_filenames)
