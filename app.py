@@ -33,6 +33,7 @@ def validate_input(value):
     return value
 
 def draw_images():
+    st.title("Draw Images")
     # Specify canvas parameters in application
     drawing_mode = st.sidebar.selectbox(
         "Drawing tool:", ("freedraw", "line", "circle")
@@ -91,7 +92,7 @@ def draw_images():
 def display_images():
     # Add an input field to the Streamlit app
     value = None
-
+    st.title("Display Images")
     if os.path.exists(cur+'/dataset/'):
         dataset_folder = cur+'/dataset/'
         if len(os.listdir(dataset_folder)) > 0:
@@ -127,13 +128,52 @@ def display_images():
         else:
             st.warning(f"No images found for value {validated_value}.")
 
-    
+def data_description():
+    # Create a dictionary to store the image counts for each subfolder
+    st.title("Dataset Description")
+    subfolder_counts = {}
+
+    dataset_path = cur+'/dataset/'
+
+    # Loop through each subfolder in the dataset folder
+    for subfolder_name in os.listdir(dataset_path):
+        # Check if the subfolder name is a number between 10 and 19
+        if subfolder_name.isdigit() and 10 <= int(subfolder_name) <= 19:
+            # Get the path to the subfolder
+            subfolder_path = os.path.join(dataset_path, subfolder_name)
+
+            # Count the number of images in the subfolder
+            image_count = 0
+            for filename in os.listdir(subfolder_path):
+                file_path = os.path.join(subfolder_path, filename)
+                try:
+                    with Image.open(file_path) as image:
+                        image_count += 1
+                except:
+                    pass
+
+            # Store the image count in the dictionary
+            subfolder_counts[subfolder_name] = image_count
+
+    # Calculate the total number of images
+    total_count = sum(subfolder_counts.values())
+
+    # Sort the subfolder counts by subfolder name
+    sorted_counts = sorted(subfolder_counts.items(), key=lambda x: int(x[0]))
+
+    # Display the results in a Streamlit table
+    st.write("## Image Counts by Subfolder")
+    table_data = [{"Subfolder": subfolder_name, "Image Count": image_count} for subfolder_name, image_count in sorted_counts]
+    st.table(table_data)
+    st.write(f"Total Images: {total_count}")
     
 # Add pages to the Streamlit app
-menu = ['Display Images','Draw Images']
+menu = ['Display Images','Draw Images', 'Data Description']
 choice = st.sidebar.selectbox('Select an option',menu)
 
 if choice == 'Draw Images':
     draw_images()
-else:
+elif choice == 'Display Images':
     display_images()
+else:
+    data_description()
