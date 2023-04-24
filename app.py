@@ -2,16 +2,17 @@ import subprocess
 from flag import *
 # Read the requirements.txt file
 # Need to run only when reboot is done
-'''
-if (get() == 0):
-    with open('requirements.txt') as f:
-        requirements = f.read().splitlines()
 
-    # Install the required packages using pip
-    for package in requirements:
-        subprocess.check_call(['pip', 'install', package])
-    set(1)
-'''
+# if (get() == 0):
+#     with open('requirements.txt') as f:
+#         requirements = f.read().splitlines()
+
+#     # Install the required packages using pip
+#     for package in requirements:
+#         subprocess.check_call(['pip', 'install', package])
+#     set(1)
+
+
 from PIL import Image
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
