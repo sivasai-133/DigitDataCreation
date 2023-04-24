@@ -17,6 +17,9 @@ from streamlit_drawable_canvas import st_canvas
 from matplotlib import pyplot as plt
 import os
 import numpy as np
+import shutil
+import io
+import base64
 
 cur = os.getcwd()
 
@@ -36,8 +39,6 @@ def draw_images():
     )
 
     stroke_width = st.sidebar.slider("Stroke width: ", 1, 25, 3)
-    if drawing_mode == 'point':
-        point_display_radius = st.sidebar.slider("Point display radius: ", 1, 25, 3)
 
     # Create a canvas component
     canvas_result = st_canvas(
@@ -49,7 +50,6 @@ def draw_images():
         height=150,
         width = 150,
         drawing_mode=drawing_mode,
-        point_display_radius=point_display_radius if drawing_mode == 'point' else 0,
         key="canvas",
     )
 
@@ -91,6 +91,23 @@ def draw_images():
 def display_images():
     # Add an input field to the Streamlit app
     value = None
+
+    if os.path.exists(cur+'/dataset/'):
+        dataset_folder = cur+'/dataset/'
+        if len(os.listdir(dataset_folder)) > 0:
+            buffer = io.BytesIO()
+            shutil.make_archive('dataset', 'zip', dataset_folder)
+            with open('dataset.zip', 'rb') as f:
+                buffer.write(f.read())
+            with st.container():
+                
+                st.markdown("<div style='margin-left:auto; text-align:right;'>"
+            "<p>Download Dataset: "
+            "<a href='data:application/zip;base64,{}' download='dataset.zip'>"
+            "<button>Download</button>"
+            "</a></p>"
+            "</div>".format(base64.b64encode(buffer.getvalue()).decode('utf-8')), unsafe_allow_html=True)
+
     value = st.text_input("Enter a value between 10 and 19:","1", key="input_field")
 
     # Validate the input value
@@ -106,6 +123,8 @@ def display_images():
         else:
             st.warning(f"No images found for value {validated_value}.")
 
+    
+    
 # Add pages to the Streamlit app
 menu = ['Display Images','Draw Images']
 choice = st.sidebar.selectbox('Select an option',menu)

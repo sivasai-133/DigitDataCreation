@@ -3,3 +3,6 @@ numpy
 streamlit_drawable_canvas
 matplotlib
 pandas
+pytest-shutil
+requires.io
+pybase64
