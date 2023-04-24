@@ -108,12 +108,16 @@ def display_images():
             "</a></p>"
             "</div>".format(base64.b64encode(buffer.getvalue()).decode('utf-8')), unsafe_allow_html=True)
 
-    value = st.text_input("Enter a value between 10 and 19:","1", key="input_field")
 
+
+    with st.form(key='my_form'):
+        value = st.text_input("Enter a value between 10 and 19:","1", key="input_field")
+        submit_button = st.form_submit_button(label='Submit')
+    
     # Validate the input value
     validated_value = validate_input(value)
 
-    if validated_value is not None:
+    if validated_value is not None and submit_button:
         path = cur+'/dataset/' + str(validated_value) + '/'
         if os.path.exists(path) and len(os.listdir(path)) > 0:
             image_filenames = os.listdir(path)
